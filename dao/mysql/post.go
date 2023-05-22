@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"AllenSo/model"
+	"fmt"
 	"go.uber.org/zap"
 )
 
@@ -87,4 +88,22 @@ func (postDAO) UpdatePostByAdmin(u *model.PostDTOUpdateByAdmin) (err error) {
 func (postDAO) DeletePostByPostId(postId int64) (err error) {
 	err = db.Delete(&model.Post{}, "post_id = ?", postId).Error
 	return
+}
+
+//
+// InsertPostList
+//  @Description: 批量插入帖子
+//  @param p
+//  @return err
+//
+func InsertPostList(p []*model.Post) (err error) {
+	result := db.Create(p)
+	err = result.Error
+	affected := result.RowsAffected
+	fmt.Println("affected: ", affected)
+	if err != nil {
+		zap.L().Error("[dao mysql post] insert post list error ", zap.Error(err))
+		return
+	}
+	return nil
 }
