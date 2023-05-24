@@ -55,7 +55,7 @@ func FetchInitPostList() error {
 				Title:   p["title"].(string),
 				Content: p["content"].(string),
 				PostId:  util.GenSnowflakeID(),
-				UserId:  133370088521728,
+				UserId:  133370088521728, // 填写用户Id
 			}
 			postList = append(postList, post)
 		}
