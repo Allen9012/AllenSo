@@ -2,22 +2,22 @@ package once
 
 import (
 	"AllenSo/model"
+	"AllenSo/util"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/gocolly/colly"
 	"net/url"
 )
 
-var ErrorOutRange = errors.New("图片不存在")
-
 func GetPicture(p *model.SearchDTO) ([]*model.PictureVO, error) {
 	var escape, urlStr string
+	// 使用url包自动url转换
 	if p.Text == "" {
 		escape = url.QueryEscape("壁纸")
 	} else {
 		escape = url.QueryEscape(p.Text)
 	}
+	// 拼接url
 	urlStr = "https://cn.bing.com/images/search?q=" + escape + "&first=1"
 	c := colly.NewCollector()
 
@@ -25,9 +25,11 @@ func GetPicture(p *model.SearchDTO) ([]*model.PictureVO, error) {
 	var picMap map[string]string
 
 	var bingPicture []*model.PictureVO
-
+	// 对于是一个HTML的文件第一个参数填写对应的css选择器
 	c.OnHTML(".iuscp.isv", func(e *colly.HTMLElement) {
+		// 拿到图片属性
 		pic := e.ChildAttr(".iusc", "m")
+		// 获取标题
 		title := e.ChildAttr(".inflnk", "aria-label")
 
 		err := json.Unmarshal([]byte(pic), &picMap)
@@ -38,22 +40,22 @@ func GetPicture(p *model.SearchDTO) ([]*model.PictureVO, error) {
 
 		bingPicture = append(bingPicture, &model.PictureVO{
 			Title:   title,
-			Picture: picMap["turl"],
+			Picture: picMap["murl"],
 			Purl:    picMap["purl"],
 		})
 	})
-
+	// c.Visit() 正式启动网页访问。
 	err := c.Visit(urlStr)
 	if err != nil {
 		fmt.Println("c.Visit error ", err)
 		return nil, err
 	}
-
+	// 获取某一页的图片
 	start := (p.Page - 1) * p.Size
 	end := start + p.Size
-
+	// 超过所有图片的数据
 	if end >= len(bingPicture) {
-		return nil, ErrorOutRange
+		return nil, util.ErrorOutRange
 	}
 
 	return bingPicture[start:end], nil

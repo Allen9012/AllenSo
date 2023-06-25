@@ -11,6 +11,7 @@ func routerV1(r *gin.RouterGroup) {
 	v1 := r.Group("/v1")
 	userRouter(v1)
 	postRouter(v1)
+	pictureRouter(v1)
 }
 
 // 示例的用户路由
@@ -57,4 +58,11 @@ func postRouter(r *gin.RouterGroup) {
 	post.POST("/update", controller.Post.UpdatePostByAdmin)
 	post.GET("/get", controller.Post.GetPostByPostId)
 	post.POST("/list/page", controller.Post.GetPostList)
+}
+
+// 示例的图片路由
+func pictureRouter(r *gin.RouterGroup) {
+	picture := r.Group("/picture")
+	picture.Use(middleware.AuthToken)
+	picture.POST("/list/page/vo", controller.Picture.GetPictureList)
 }

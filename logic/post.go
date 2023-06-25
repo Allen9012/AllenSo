@@ -4,15 +4,13 @@ import (
 	"AllenSo/dao/mysql"
 	"AllenSo/model"
 	"AllenSo/util"
-	"errors"
 )
 
 type postLogic struct {
 }
 
 var (
-	ErrorPostExist = errors.New("文章已存在")
-	Post           = new(postLogic)
+	Post = new(postLogic)
 )
 
 func (postLogic) InsertPost(p *model.PostDTOInsert, userId int64) (err error) {

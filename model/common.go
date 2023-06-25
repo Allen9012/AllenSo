@@ -6,6 +6,7 @@ type ListParams struct {
 	Size int
 }
 
+// SearchDTO 封装返回分页查询
 type SearchDTO struct {
 	Size int    `json:"size"`
 	Page int    `json:"page"`

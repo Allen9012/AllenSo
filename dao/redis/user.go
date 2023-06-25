@@ -2,13 +2,7 @@ package redis
 
 import (
 	"AllenSo/util"
-	"errors"
-
 	"go.uber.org/zap"
-)
-
-var (
-	ErrorTokenNotExist = errors.New("Token 不存在")
 )
 
 // InsertTokenByUserId
@@ -54,7 +48,7 @@ func CheckTokenExist(token string) ([]interface{}, error) {
 		return nil, err
 	}
 	if res == nil {
-		return nil, ErrorTokenNotExist
+		return nil, util.ErrorTokenNotExist
 	}
 	return res, nil
 }

@@ -22,7 +22,7 @@ func FetchInitPostList() error {
 		buf := bytes.NewBuffer([]byte(payload))
 
 		newRequest, err := http.NewRequest(http.MethodPost, url, buf)
-		newRequest.Header.Set("cookie", "输入你自己的cookie")
+		newRequest.Header.Set("cookie", "YTRjNjgzZGUtMDlhNC00YWYyLTljYzUtOTY4ODExZmM4YjQx")
 		newRequest.Header.Set("content-type", "application/json")
 
 		resp, err := client.Do(newRequest)

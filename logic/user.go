@@ -5,8 +5,6 @@ import (
 	"AllenSo/dao/redis"
 	"AllenSo/model"
 	"AllenSo/util"
-	"errors"
-
 	"github.com/google/uuid"
 )
 
@@ -14,8 +12,7 @@ type userLogic struct {
 }
 
 var (
-	ErrorUserExist = errors.New("用户已存在")
-	User           = new(userLogic)
+	User = new(userLogic)
 )
 
 func (userLogic) Login(p *model.UserDTOLogin) (*model.UserVO, error) {
@@ -45,7 +42,7 @@ func (userLogic) Login(p *model.UserDTOLogin) (*model.UserVO, error) {
 func (userLogic) Register(u *model.UserDTORegister) (err error) {
 	// 判断用户存不存在
 	if mysql.User.CheckAccountExist(u.Account) {
-		return ErrorUserExist
+		return util.ErrorUserExist
 	}
 	// 生成userId
 	userID := util.GenSnowflakeID()
@@ -77,7 +74,7 @@ func (userLogic) UpdateBySelf(u *model.UserDTOUpdateBySelf) error {
 	if user.Account != u.Account {
 		exist := mysql.User.CheckAccountExist(u.Account)
 		if exist {
-			return ErrorUserExist
+			return util.ErrorUserExist
 		}
 	}
 	err = mysql.User.UpdateUserBySelf(u)
@@ -95,7 +92,7 @@ func (userLogic) GetUserVOList(params *model.ListParams) ([]*model.UserVO, error
 func (userLogic) AddUser(u *model.UserDTOAdd) (err error) {
 	// 与 register 一致。。。
 	if mysql.User.CheckAccountExist(u.Account) {
-		return ErrorUserExist
+		return util.ErrorUserExist
 	}
 	userID := util.GenSnowflakeID()
 	user := &model.User{

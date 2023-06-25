@@ -81,7 +81,7 @@ func (postController) UpdateBySelf(c *gin.Context) {
 	// 业务
 	if err = logic.Post.UpdateBySelf(u); err != nil {
 		zap.L().Warn("[controller postController UpdateBySelf] update post by self failed ", zap.Error(err))
-		if errors.Is(err, logic.ErrorPostExist) {
+		if errors.Is(err, util.ErrorPostExist) {
 			ResponseErrorWithMsg(c, ErrorInvalidParams, err.Error())
 			return
 		}
@@ -207,7 +207,7 @@ func (postController) AddPost(c *gin.Context) {
 	// 2、业务处理
 	if err = logic.Post.AddPost(u, userId); err != nil {
 		zap.L().Error("[controller post AddPost] add post failed ", zap.Error(err))
-		if errors.Is(err, logic.ErrorPostExist) {
+		if errors.Is(err, util.ErrorPostExist) {
 			ResponseErrorWithMsg(c, ErrorInvalidParams, err.Error())
 			return
 		}
@@ -271,7 +271,7 @@ func (postController) UpdatePostByAdmin(c *gin.Context) {
 	err = logic.Post.UpdatePostByAdmin(u)
 	if err != nil {
 		zap.L().Warn("[controller postController UpdatePostByAdmin] update post by admin failed ", zap.Error(err))
-		if errors.Is(err, logic.ErrorPostExist) {
+		if errors.Is(err, util.ErrorPostExist) {
 			ResponseErrorWithMsg(c, ErrorInvalidParams, err.Error())
 			return
 		}
